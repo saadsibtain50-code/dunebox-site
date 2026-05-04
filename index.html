@@ -1,0 +1,1671 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<meta name="theme-color" content="#0a0908">
+<title>Dunebox AI — Sovereign GPU Cloud, Dubai</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,300;9..144,400;9..144,500;9..144,600;9..144,700&family=JetBrains+Mono:wght@300;400;500;600&family=Inter+Tight:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+:root {
+  --ink: #0a0908;
+  --bone: #f4ede4;
+  --sand: #e8dcc8;
+  --dune: #c4a875;
+  --rust: #b8492a;
+  --shadow: #1f1c19;
+  --line: rgba(10, 9, 8, 0.12);
+  --line-strong: rgba(10, 9, 8, 0.4);
+  --serif: 'Fraunces', Georgia, serif;
+  --sans: 'Inter Tight', -apple-system, sans-serif;
+  --mono: 'JetBrains Mono', monospace;
+}
+* { margin: 0; padding: 0; box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+html { scroll-behavior: smooth; -webkit-text-size-adjust: 100%; }
+body {
+  background: var(--bone);
+  color: var(--ink);
+  font-family: var(--sans);
+  font-size: 16px;
+  line-height: 1.5;
+  overflow-x: hidden;
+  position: relative;
+  -webkit-font-smoothing: antialiased;
+}
+body::before {
+  content: '';
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  opacity: 0.4;
+  z-index: 1000;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='3'/%3E%3CfeColorMatrix values='0 0 0 0 0.04 0 0 0 0 0.035 0 0 0 0 0.03 0 0 0 0 0.08 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  mix-blend-mode: multiply;
+}
+
+/* =============================================================
+   STATUS BAR
+   ============================================================= */
+.statusbar {
+  position: fixed; top: 0; left: 0; right: 0;
+  background: var(--ink); color: var(--bone);
+  font-family: var(--mono); font-size: 11px;
+  letter-spacing: 0.08em; text-transform: uppercase;
+  padding: 8px 32px;
+  display: flex; justify-content: space-between; align-items: center;
+  z-index: 100;
+  border-bottom: 1px solid var(--dune);
+  padding-top: max(8px, env(safe-area-inset-top));
+}
+.statusbar-left, .statusbar-right { display: flex; gap: 24px; align-items: center; }
+.dot {
+  display: inline-block; width: 6px; height: 6px;
+  background: #6dd58c; border-radius: 50%;
+  margin-right: 8px;
+  box-shadow: 0 0 8px #6dd58c;
+  animation: pulse 2s ease-in-out infinite;
+}
+@keyframes pulse {
+  0%, 100% { opacity: 1; transform: scale(1); }
+  50% { opacity: 0.5; transform: scale(0.8); }
+}
+
+/* =============================================================
+   NAV
+   ============================================================= */
+nav {
+  position: fixed; left: 0; right: 0;
+  top: calc(32px + env(safe-area-inset-top));
+  padding: 20px 32px;
+  display: flex; justify-content: space-between; align-items: center;
+  z-index: 99;
+  background: rgba(244, 237, 228, 0.85);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border-bottom: 1px solid var(--line);
+}
+.logo {
+  font-family: var(--serif); font-weight: 500; font-size: 22px;
+  letter-spacing: -0.02em;
+  display: flex; align-items: baseline; gap: 6px;
+}
+.logo-mark {
+  display: inline-block; width: 12px; height: 12px;
+  background: var(--rust); border-radius: 50%;
+  margin-right: 4px; transform: translateY(1px);
+}
+.logo em { font-style: italic; color: var(--rust); }
+
+.nav-links { display: flex; gap: 32px; align-items: center; }
+.nav-links a {
+  font-family: var(--mono); font-size: 11px;
+  letter-spacing: 0.1em; text-transform: uppercase;
+  color: var(--ink); text-decoration: none;
+  padding: 6px 0;
+  border-bottom: 1px solid transparent;
+  transition: border-color 0.3s;
+}
+.nav-links a:hover { border-bottom-color: var(--rust); }
+.nav-cta {
+  background: var(--ink); color: var(--bone) !important;
+  padding: 10px 18px !important;
+}
+.nav-cta:hover { background: var(--rust); border-bottom-color: transparent !important; }
+
+/* =============================================================
+   HERO — DESKTOP
+   ============================================================= */
+.hero {
+  padding: 180px 32px 80px;
+  position: relative;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 60px;
+  align-items: center;
+  min-height: 100vh;
+}
+.hero::after {
+  content: '';
+  position: absolute; bottom: 0; left: 0; right: 0;
+  height: 1px; background: var(--line);
+}
+.hero-tagline {
+  font-family: var(--mono); font-size: 11px;
+  letter-spacing: 0.15em; text-transform: uppercase;
+  color: var(--rust); margin-bottom: 32px;
+  display: flex; align-items: center; gap: 12px;
+}
+.hero-tagline::before {
+  content: ''; width: 32px; height: 1px; background: var(--rust);
+}
+.hero h1 {
+  font-family: var(--serif); font-weight: 300;
+  font-size: clamp(40px, 7vw, 96px);
+  line-height: 0.98;
+  letter-spacing: -0.03em;
+  margin-bottom: 28px;
+  font-variation-settings: "opsz" 144;
+}
+.hero h1 em { font-style: italic; font-weight: 400; color: var(--rust); }
+.hero-sub {
+  font-size: 17px; line-height: 1.6;
+  max-width: 520px; margin-bottom: 32px;
+  color: var(--shadow);
+}
+.hero-actions { display: flex; gap: 12px; margin-bottom: 40px; flex-wrap: wrap; }
+.btn {
+  font-family: var(--mono); font-size: 12px;
+  letter-spacing: 0.1em; text-transform: uppercase;
+  padding: 16px 24px;
+  border: 1px solid var(--ink);
+  background: var(--ink); color: var(--bone);
+  text-decoration: none; cursor: pointer;
+  transition: all 0.3s;
+  display: inline-flex; align-items: center; justify-content: center; gap: 12px;
+  white-space: nowrap;
+}
+.btn:hover { background: var(--rust); border-color: var(--rust); }
+.btn.ghost { background: transparent; color: var(--ink); }
+.btn.ghost:hover { background: var(--ink); color: var(--bone); }
+.btn .arrow { display: inline-block; transition: transform 0.3s; }
+.btn:hover .arrow { transform: translateX(4px); }
+
+.hero-trust {
+  display: flex; gap: 32px;
+  border-top: 1px solid var(--line);
+  padding-top: 20px; max-width: 520px;
+  flex-wrap: wrap;
+}
+.trust-item .label {
+  font-family: var(--mono); font-size: 10px;
+  letter-spacing: 0.1em; text-transform: uppercase;
+  color: var(--shadow); opacity: 0.6;
+  margin-bottom: 6px;
+}
+.trust-item .value {
+  font-family: var(--serif); font-size: 16px; font-weight: 500;
+}
+
+/* GPU stack — desktop uses absolute positioning */
+.hero-right {
+  position: relative; height: 600px;
+  display: flex; align-items: center; justify-content: center;
+}
+.gpu-stack { position: relative; width: 100%; height: 100%; }
+
+.gpu-card {
+  background: var(--ink); color: var(--bone);
+  padding: 28px;
+  border: 1px solid var(--dune);
+  font-family: var(--mono);
+}
+
+/* Desktop: absolute positioning */
+@media (min-width: 969px) {
+  .gpu-card { position: absolute; width: 320px; left: 50%; top: 50%; }
+  .gpu-card.tier-a { z-index: 3; transform: translate(-50%, -50%) rotate(-2deg); box-shadow: 12px 12px 0 var(--rust); }
+  .gpu-card.tier-b {
+    z-index: 2; transform: translate(-30%, -10%) rotate(3deg);
+    background: var(--sand); color: var(--ink); border-color: var(--ink);
+    box-shadow: 12px 12px 0 var(--ink);
+  }
+  .gpu-card.tier-c {
+    z-index: 1; transform: translate(-70%, -90%) rotate(-5deg);
+    background: var(--bone); color: var(--ink); border-color: var(--ink);
+    box-shadow: 12px 12px 0 var(--dune);
+  }
+}
+
+.gpu-header {
+  display: flex; justify-content: space-between;
+  font-size: 10px; letter-spacing: 0.1em; text-transform: uppercase;
+  margin-bottom: 16px; padding-bottom: 12px;
+  border-bottom: 1px dashed currentColor;
+  opacity: 0.7;
+}
+.gpu-status { display: flex; align-items: center; gap: 6px; }
+.gpu-status::before {
+  content: ''; width: 6px; height: 6px;
+  background: #6dd58c; border-radius: 50%;
+  display: inline-block;
+}
+.gpu-title {
+  font-family: var(--serif); font-size: 24px;
+  font-weight: 500; margin-bottom: 4px;
+  letter-spacing: -0.01em;
+}
+.gpu-card.tier-a .gpu-title { color: var(--bone); }
+.gpu-sub {
+  font-family: var(--mono); font-size: 11px;
+  letter-spacing: 0.05em; opacity: 0.7;
+  margin-bottom: 20px;
+}
+.gpu-row {
+  display: flex; justify-content: space-between;
+  font-size: 11px; margin-bottom: 8px; opacity: 0.85;
+}
+.gpu-row .v { font-weight: 600; opacity: 1; }
+.gpu-price {
+  margin-top: 16px; padding-top: 16px;
+  border-top: 1px dashed currentColor;
+  display: flex; justify-content: space-between; align-items: baseline;
+}
+.gpu-price .l {
+  font-size: 10px; letter-spacing: 0.1em;
+  text-transform: uppercase; opacity: 0.6;
+}
+.gpu-price .v {
+  font-family: var(--serif); font-size: 20px; font-weight: 500;
+}
+
+/* =============================================================
+   SECTION BASE
+   ============================================================= */
+section {
+  padding: 100px 32px;
+  border-bottom: 1px solid var(--line);
+  position: relative;
+}
+.section-label {
+  font-family: var(--mono); font-size: 11px;
+  letter-spacing: 0.15em; text-transform: uppercase;
+  color: var(--rust); margin-bottom: 16px;
+  display: flex; align-items: center; gap: 12px;
+}
+.section-label .num {
+  font-family: var(--serif); font-style: italic;
+  color: var(--ink); opacity: 0.4;
+}
+.section-title {
+  font-family: var(--serif); font-weight: 300;
+  font-size: clamp(32px, 5vw, 60px);
+  line-height: 1.05; letter-spacing: -0.025em;
+  margin-bottom: 20px; max-width: 900px;
+}
+.section-title em { font-style: italic; color: var(--rust); }
+.section-intro {
+  font-size: 16px; line-height: 1.6;
+  max-width: 680px; color: var(--shadow);
+  margin-bottom: 48px;
+}
+
+/* =============================================================
+   WHY SOVEREIGN
+   ============================================================= */
+.why-grid {
+  display: grid; grid-template-columns: repeat(4, 1fr);
+  gap: 0;
+  border-top: 1px solid var(--ink);
+  border-left: 1px solid var(--ink);
+}
+.why-item {
+  border-right: 1px solid var(--ink);
+  border-bottom: 1px solid var(--ink);
+  padding: 28px;
+  background: var(--bone);
+  display: flex; flex-direction: column; justify-content: space-between;
+  gap: 24px;
+  transition: background 0.3s;
+}
+.why-item:hover { background: var(--sand); }
+.why-icon {
+  font-family: var(--serif); font-style: italic;
+  font-size: 32px; font-weight: 400;
+  color: var(--rust); line-height: 1;
+}
+.why-title {
+  font-family: var(--serif); font-size: 22px; font-weight: 500;
+  letter-spacing: -0.01em; margin-bottom: 10px; line-height: 1.2;
+}
+.why-desc {
+  font-size: 13px; line-height: 1.5; color: var(--shadow);
+}
+
+/* =============================================================
+   INFRASTRUCTURE
+   ============================================================= */
+.infra-section { background: var(--ink); color: var(--bone); }
+.infra-section .section-label { color: var(--dune); }
+.infra-section .section-label .num { color: var(--bone); opacity: 0.4; }
+.infra-section .section-title em { color: var(--dune); }
+.infra-section .section-intro { color: rgba(244, 237, 228, 0.7); }
+
+.infra-grid {
+  display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px;
+}
+.infra-card {
+  background: rgba(244, 237, 228, 0.04);
+  border: 1px solid rgba(244, 237, 228, 0.15);
+  padding: 32px 28px;
+  position: relative;
+  transition: all 0.3s;
+  display: flex; flex-direction: column;
+}
+.infra-card:hover {
+  background: rgba(244, 237, 228, 0.08);
+  border-color: var(--dune);
+}
+.infra-tag {
+  position: absolute; top: -12px; left: 24px;
+  background: var(--rust); color: var(--bone);
+  font-family: var(--mono); font-size: 10px;
+  letter-spacing: 0.15em; text-transform: uppercase;
+  padding: 4px 12px;
+}
+.infra-card.starter .infra-tag { background: var(--bone); color: var(--ink); }
+.infra-card.frontier .infra-tag { background: var(--dune); color: var(--ink); }
+.infra-title {
+  font-family: var(--serif); font-size: 24px; font-weight: 500;
+  letter-spacing: -0.02em; margin-bottom: 4px;
+  margin-top: 12px; color: var(--bone);
+}
+.infra-model {
+  font-family: var(--mono); font-size: 10px;
+  letter-spacing: 0.1em; opacity: 0.6;
+  margin-bottom: 20px; color: var(--dune);
+}
+.infra-specs {
+  display: grid; grid-template-columns: repeat(2, 1fr);
+  gap: 14px 20px;
+  border-top: 1px solid rgba(244, 237, 228, 0.15);
+  border-bottom: 1px solid rgba(244, 237, 228, 0.15);
+  padding: 18px 0; margin-bottom: 20px;
+}
+.infra-spec .l {
+  font-family: var(--mono); font-size: 9px;
+  letter-spacing: 0.1em; text-transform: uppercase;
+  opacity: 0.5; margin-bottom: 4px;
+}
+.infra-spec .v {
+  font-family: var(--serif); font-size: 16px; font-weight: 500;
+  letter-spacing: -0.01em; color: var(--bone);
+}
+.infra-best-for {
+  font-size: 12px; line-height: 1.55;
+  color: rgba(244, 237, 228, 0.75);
+  flex-grow: 1;
+}
+.infra-best-for strong {
+  display: block;
+  font-family: var(--mono); font-size: 9px;
+  letter-spacing: 0.15em; text-transform: uppercase;
+  color: var(--dune); font-weight: 600;
+  margin-bottom: 8px;
+}
+
+/* =============================================================
+   PRICING
+   ============================================================= */
+.pricing-tabs {
+  display: flex; gap: 0; margin-bottom: 32px;
+  border-bottom: 1px solid var(--ink);
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+}
+.tab {
+  font-family: var(--mono); font-size: 11px;
+  letter-spacing: 0.1em; text-transform: uppercase;
+  padding: 16px 24px;
+  border: none; background: transparent;
+  cursor: pointer; color: var(--ink); opacity: 0.5;
+  transition: all 0.3s;
+  border-bottom: 2px solid transparent;
+  margin-bottom: -1px; font-weight: 500;
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+.tab.active { opacity: 1; border-bottom-color: var(--rust); }
+.tab:hover { opacity: 1; }
+
+.pricing-grid {
+  display: grid; grid-template-columns: repeat(4, 1fr);
+  gap: 0;
+  border-top: 1px solid var(--ink);
+  border-left: 1px solid var(--ink);
+}
+.tier {
+  border-right: 1px solid var(--ink);
+  border-bottom: 1px solid var(--ink);
+  padding: 32px 24px;
+  background: var(--bone);
+  position: relative;
+  display: flex; flex-direction: column;
+}
+.tier.featured { background: var(--ink); color: var(--bone); }
+.tier.featured .tier-name { color: var(--bone); }
+.tier.featured .tier-price { color: var(--dune); }
+.tier-badge {
+  position: absolute; top: 20px; right: 20px;
+  font-family: var(--mono); font-size: 9px;
+  letter-spacing: 0.15em; text-transform: uppercase;
+  padding: 4px 10px;
+  background: var(--rust); color: var(--bone);
+}
+.tier-name {
+  font-family: var(--serif); font-size: 26px; font-weight: 400;
+  letter-spacing: -0.02em; margin-bottom: 6px; line-height: 1;
+}
+.tier-tag {
+  font-family: var(--mono); font-size: 10px;
+  letter-spacing: 0.1em; text-transform: uppercase;
+  opacity: 0.6; margin-bottom: 24px;
+}
+.tier-price {
+  font-family: var(--serif); font-weight: 300;
+  font-size: 44px; line-height: 1;
+  letter-spacing: -0.03em; color: var(--rust);
+  margin-bottom: 4px;
+}
+.tier-price .small {
+  font-size: 18px; vertical-align: top;
+  margin-right: 2px; opacity: 0.7;
+}
+.tier-price-unit {
+  font-family: var(--mono); font-size: 10px;
+  letter-spacing: 0.1em; text-transform: uppercase;
+  opacity: 0.6; margin-bottom: 24px;
+}
+.tier.featured .tier-price-unit { color: rgba(244, 237, 228, 0.6); }
+
+.tier-features {
+  list-style: none;
+  border-top: 1px dashed currentColor;
+  padding-top: 18px; margin-bottom: 24px; flex-grow: 1;
+}
+.tier-features li {
+  font-size: 12px; line-height: 1.5;
+  padding: 6px 0;
+  display: flex; gap: 10px; align-items: flex-start;
+}
+.tier-features li::before {
+  content: '+';
+  font-family: var(--serif); font-size: 16px;
+  color: var(--rust); line-height: 1;
+  flex-shrink: 0; margin-top: -2px;
+}
+.tier.featured .tier-features li::before { color: var(--dune); }
+
+.tier-cta {
+  font-family: var(--mono); font-size: 11px;
+  letter-spacing: 0.1em; text-transform: uppercase;
+  padding: 14px 20px;
+  border: 1px solid var(--ink);
+  background: transparent; color: var(--ink);
+  text-decoration: none; text-align: center;
+  cursor: pointer; transition: all 0.3s;
+  display: block;
+}
+.tier-cta:hover { background: var(--ink); color: var(--bone); }
+.tier.featured .tier-cta { border-color: var(--dune); color: var(--dune); }
+.tier.featured .tier-cta:hover { background: var(--dune); color: var(--ink); }
+
+.pricing-note {
+  margin-top: 28px;
+  font-family: var(--mono); font-size: 11px;
+  letter-spacing: 0.05em; color: var(--shadow);
+  opacity: 0.6; text-align: center;
+}
+
+/* Slice explainer */
+.slice-explainer {
+  background: var(--sand);
+  border: 1px solid var(--ink);
+  padding: 36px;
+  margin-top: 40px;
+  display: grid;
+  grid-template-columns: 1fr 2fr;
+  gap: 32px;
+  align-items: center;
+}
+.slice-explainer-left h3 {
+  font-family: var(--serif); font-size: 28px;
+  font-weight: 400; letter-spacing: -0.02em;
+  line-height: 1.05; margin-bottom: 12px;
+}
+.slice-explainer-left h3 em { font-style: italic; color: var(--rust); }
+.slice-explainer-left .tag {
+  font-family: var(--mono); font-size: 10px;
+  letter-spacing: 0.15em; text-transform: uppercase;
+  color: var(--rust); margin-bottom: 14px;
+}
+.slice-explainer-right p {
+  font-size: 14px; line-height: 1.6;
+  color: var(--shadow); margin-bottom: 14px;
+}
+.slice-bar {
+  display: flex; gap: 4px; margin-top: 20px;
+  border: 1px solid var(--ink);
+  height: 48px;
+  background: var(--bone);
+}
+.slice-segment {
+  flex: 1;
+  display: flex; align-items: center; justify-content: center;
+  font-family: var(--mono); font-size: 10px;
+  letter-spacing: 0.1em; text-transform: uppercase;
+  border-right: 1px solid var(--bone);
+}
+.slice-segment:last-child { border-right: none; }
+.slice-segment.quarter { background: var(--dune); color: var(--ink); flex: 1.5; }
+.slice-segment.half { background: var(--ink); color: var(--bone); flex: 3; }
+
+/* =============================================================
+   SERVICES
+   ============================================================= */
+.services-section { background: var(--sand); }
+.svc-grid {
+  display: grid; grid-template-columns: repeat(2, 1fr); gap: 0;
+  border-top: 1px solid var(--ink);
+  border-left: 1px solid var(--ink);
+}
+.svc-cell {
+  border-right: 1px solid var(--ink);
+  border-bottom: 1px solid var(--ink);
+  padding: 36px 28px;
+  background: var(--sand);
+  display: flex; flex-direction: column; justify-content: space-between;
+  gap: 24px;
+  transition: background 0.3s;
+}
+.svc-cell:hover { background: var(--bone); }
+.svc-num {
+  font-family: var(--serif); font-style: italic;
+  font-size: 14px; color: var(--rust); margin-bottom: 12px;
+}
+.svc-title {
+  font-family: var(--serif); font-size: 28px; font-weight: 400;
+  letter-spacing: -0.02em; line-height: 1.05; margin-bottom: 14px;
+}
+.svc-desc {
+  font-size: 14px; line-height: 1.6;
+  color: var(--shadow);
+}
+.svc-price {
+  display: flex; justify-content: space-between; align-items: baseline;
+  padding-top: 16px;
+  border-top: 1px dashed var(--line-strong);
+}
+.svc-price-label {
+  font-family: var(--mono); font-size: 10px;
+  letter-spacing: 0.15em; text-transform: uppercase; opacity: 0.6;
+}
+.svc-price-val {
+  font-family: var(--serif); font-size: 22px; font-weight: 500;
+  color: var(--rust); letter-spacing: -0.01em;
+}
+
+/* =============================================================
+   USE CASES
+   ============================================================= */
+.usecase-grid {
+  display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px;
+}
+.usecase {
+  border: 1px solid var(--ink);
+  padding: 24px; background: var(--bone);
+  transition: transform 0.3s;
+}
+.usecase:hover { transform: translate(-3px, -3px); box-shadow: 6px 6px 0 var(--rust); }
+.usecase-tag {
+  font-family: var(--mono); font-size: 10px;
+  letter-spacing: 0.15em; text-transform: uppercase;
+  color: var(--rust); margin-bottom: 14px;
+}
+.usecase-title {
+  font-family: var(--serif); font-size: 20px; font-weight: 500;
+  letter-spacing: -0.01em; line-height: 1.2; margin-bottom: 10px;
+}
+.usecase-desc {
+  font-size: 13px; line-height: 1.55;
+  color: var(--shadow); margin-bottom: 16px;
+}
+.usecase-meta {
+  display: flex; gap: 16px; flex-wrap: wrap;
+  padding-top: 14px;
+  border-top: 1px dashed var(--line-strong);
+  font-family: var(--mono); font-size: 10px;
+  letter-spacing: 0.05em; text-transform: uppercase; opacity: 0.6;
+}
+
+/* =============================================================
+   COMPLIANCE
+   ============================================================= */
+.trust-section { background: var(--ink); color: var(--bone); }
+.trust-section .section-label { color: var(--dune); }
+.trust-section .section-label .num { color: var(--bone); opacity: 0.4; }
+.trust-section .section-title em { color: var(--dune); }
+.trust-section .section-intro { color: rgba(244, 237, 228, 0.7); }
+
+.compliance-grid {
+  display: grid; grid-template-columns: repeat(3, 1fr); gap: 0;
+  border-top: 1px solid rgba(244, 237, 228, 0.2);
+  border-left: 1px solid rgba(244, 237, 228, 0.2);
+}
+.compliance-item {
+  border-right: 1px solid rgba(244, 237, 228, 0.2);
+  border-bottom: 1px solid rgba(244, 237, 228, 0.2);
+  padding: 28px;
+  display: flex; flex-direction: column; gap: 16px;
+  transition: background 0.3s;
+}
+.compliance-item:hover { background: rgba(196, 168, 117, 0.08); }
+.compliance-mark {
+  font-family: var(--serif); font-size: 28px;
+  color: var(--dune); font-weight: 400;
+  line-height: 1;
+}
+.compliance-name {
+  font-family: var(--serif); font-size: 20px; font-weight: 500;
+  letter-spacing: -0.01em; margin-bottom: 6px; color: var(--bone);
+}
+.compliance-desc {
+  font-size: 13px; line-height: 1.5;
+  color: rgba(244, 237, 228, 0.7);
+}
+
+/* =============================================================
+   FAQ
+   ============================================================= */
+.faq-list { max-width: 880px; }
+.faq-item {
+  border-bottom: 1px solid var(--line-strong);
+  padding: 22px 0; cursor: pointer;
+}
+.faq-item:first-child { border-top: 1px solid var(--ink); }
+.faq-q {
+  display: flex; justify-content: space-between; align-items: flex-start;
+  gap: 16px;
+}
+.faq-q h4 {
+  font-family: var(--serif); font-size: 19px; font-weight: 500;
+  letter-spacing: -0.01em; line-height: 1.3;
+  flex: 1;
+}
+.faq-toggle {
+  font-family: var(--serif); font-size: 28px; font-weight: 300;
+  line-height: 1; color: var(--rust);
+  transition: transform 0.3s; flex-shrink: 0;
+}
+.faq-item.open .faq-toggle { transform: rotate(45deg); }
+.faq-a {
+  max-height: 0; overflow: hidden;
+  transition: max-height 0.4s ease, margin-top 0.4s ease;
+  font-size: 14px; line-height: 1.6; color: var(--shadow);
+  max-width: 720px;
+}
+.faq-item.open .faq-a {
+  max-height: 500px; margin-top: 14px;
+}
+
+/* =============================================================
+   CTA
+   ============================================================= */
+.cta-section {
+  background: var(--rust); color: var(--bone);
+  padding: 100px 32px; text-align: center;
+}
+.cta-section h2 {
+  font-family: var(--serif); font-weight: 300;
+  font-size: clamp(36px, 6vw, 72px);
+  line-height: 1.05; letter-spacing: -0.025em;
+  margin-bottom: 20px;
+  max-width: 900px; margin-left: auto; margin-right: auto;
+}
+.cta-section h2 em { font-style: italic; color: var(--sand); }
+.cta-section p {
+  font-size: 16px; max-width: 580px;
+  margin: 0 auto 36px; opacity: 0.9;
+  line-height: 1.6;
+}
+.cta-actions { display: flex; gap: 12px; justify-content: center; flex-wrap: wrap; }
+.cta-section .btn {
+  background: var(--ink); border-color: var(--ink); color: var(--bone);
+}
+.cta-section .btn:hover {
+  background: var(--bone); color: var(--ink); border-color: var(--bone);
+}
+.cta-section .btn.ghost {
+  background: transparent; color: var(--bone); border-color: var(--bone);
+}
+.cta-section .btn.ghost:hover { background: var(--bone); color: var(--rust); }
+
+/* =============================================================
+   FOOTER
+   ============================================================= */
+footer {
+  background: var(--ink); color: var(--bone);
+  padding: 64px 32px 28px;
+  border-top: 4px solid var(--dune);
+  padding-bottom: max(28px, env(safe-area-inset-bottom));
+}
+.footer-top {
+  display: grid; grid-template-columns: 2fr 1fr 1fr 1fr; gap: 40px;
+  padding-bottom: 48px;
+  border-bottom: 1px solid rgba(244, 237, 228, 0.15);
+  margin-bottom: 24px;
+}
+.footer-brand .logo { color: var(--bone); font-size: 28px; margin-bottom: 14px; }
+.footer-brand p {
+  font-family: var(--serif); font-style: italic;
+  font-size: 16px; font-weight: 300; line-height: 1.4;
+  max-width: 320px; color: rgba(244, 237, 228, 0.8);
+}
+.footer-col h4 {
+  font-family: var(--mono); font-size: 11px;
+  letter-spacing: 0.15em; text-transform: uppercase;
+  color: var(--dune); margin-bottom: 14px; font-weight: 500;
+}
+.footer-col a, .footer-col p {
+  display: block; color: rgba(244, 237, 228, 0.7);
+  text-decoration: none; font-size: 13px; line-height: 1.9;
+}
+.footer-col a:hover { color: var(--bone); }
+.footer-bottom {
+  display: flex; justify-content: space-between; flex-wrap: wrap; gap: 12px;
+  font-family: var(--mono); font-size: 10px;
+  letter-spacing: 0.15em; text-transform: uppercase;
+  color: rgba(244, 237, 228, 0.4);
+  padding-top: 14px;
+}
+
+/* =============================================================
+   ANIMATIONS
+   ============================================================= */
+.reveal {
+  opacity: 0; transform: translateY(20px);
+  transition: opacity 0.8s, transform 0.8s;
+}
+.reveal.visible { opacity: 1; transform: translateY(0); }
+.reveal.delay-1 { transition-delay: 0.1s; }
+.reveal.delay-2 { transition-delay: 0.2s; }
+.reveal.delay-3 { transition-delay: 0.3s; }
+
+/* =============================================================
+   TABLET — single breakpoint at 1100px
+   ============================================================= */
+@media (max-width: 1100px) and (min-width: 969px) {
+  .pricing-grid { grid-template-columns: repeat(2, 1fr); }
+  .infra-grid { grid-template-columns: 1fr; }
+  .why-grid { grid-template-columns: repeat(2, 1fr); }
+}
+
+/* =============================================================
+   MOBILE — completely rebuilt for clean vertical flow
+   ============================================================= */
+@media (max-width: 968px) {
+  /* Status bar — compact */
+  .statusbar {
+    padding: 6px 16px;
+    padding-top: max(6px, env(safe-area-inset-top));
+    font-size: 9px;
+    gap: 8px;
+  }
+  .statusbar-left, .statusbar-right { gap: 12px; }
+  .hide-mobile { display: none !important; }
+
+  /* Nav — keep visible, simplify */
+  nav {
+    padding: 14px 16px;
+    top: calc(28px + env(safe-area-inset-top));
+  }
+  .logo { font-size: 20px; }
+  .nav-links { gap: 0; }
+  .nav-cta { padding: 10px 14px !important; font-size: 10px !important; }
+
+  /* HERO — single column, GPU stack becomes vertical card list */
+  .hero {
+    grid-template-columns: 1fr;
+    padding: 120px 20px 60px;
+    gap: 48px;
+    min-height: auto;
+  }
+  .hero-tagline { margin-bottom: 24px; font-size: 10px; }
+  .hero h1 {
+    font-size: 44px;
+    line-height: 1;
+    margin-bottom: 24px;
+  }
+  .hero-sub { font-size: 16px; margin-bottom: 28px; }
+  .hero-actions { gap: 10px; margin-bottom: 32px; }
+  .hero-actions .btn { flex: 1; min-width: 0; padding: 14px 18px; font-size: 11px; }
+  .hero-trust { gap: 24px; padding-top: 18px; }
+  .hero-trust .trust-item { flex: 1; min-width: 0; }
+  .hero-trust .trust-item .value { font-size: 15px; }
+
+  /* GPU stack — clean vertical stack with no transforms */
+  .hero-right {
+    height: auto;
+    flex-direction: column;
+    gap: 16px;
+  }
+  .gpu-stack {
+    height: auto;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+  }
+  .gpu-card {
+    position: static;
+    width: 100%;
+    transform: none !important;
+    box-shadow: 6px 6px 0 var(--rust) !important;
+    padding: 22px;
+  }
+  .gpu-card.tier-b {
+    background: var(--sand); color: var(--ink); border-color: var(--ink);
+    box-shadow: 6px 6px 0 var(--ink) !important;
+  }
+  .gpu-card.tier-c {
+    background: var(--bone); color: var(--ink); border-color: var(--ink);
+    box-shadow: 6px 6px 0 var(--dune) !important;
+  }
+  .gpu-title { font-size: 22px; }
+
+  /* Sections — tighter padding */
+  section { padding: 64px 20px; }
+  .section-label { font-size: 10px; margin-bottom: 14px; }
+  .section-title {
+    font-size: 32px;
+    line-height: 1.05;
+    margin-bottom: 16px;
+  }
+  .section-intro {
+    font-size: 15px;
+    margin-bottom: 36px;
+    line-height: 1.55;
+  }
+
+  /* Why grid — 1 column */
+  .why-grid { grid-template-columns: 1fr; }
+  .why-item {
+    flex-direction: row;
+    gap: 20px;
+    align-items: flex-start;
+    padding: 22px 20px;
+    min-height: auto;
+  }
+  .why-item > div:first-child {
+    flex-shrink: 0;
+    width: 48px;
+  }
+  .why-icon { font-size: 28px; margin-bottom: 0; }
+  .why-title { font-size: 18px; margin-bottom: 6px; }
+  .why-desc { font-size: 13px; }
+
+  /* Infrastructure cards — 1 column, tighter */
+  .infra-grid { grid-template-columns: 1fr; gap: 24px; }
+  .infra-card { padding: 28px 22px; }
+  .infra-title { font-size: 22px; }
+  .infra-specs { gap: 12px 20px; padding: 16px 0; margin-bottom: 16px; }
+  .infra-spec .v { font-size: 15px; }
+
+  /* Pricing — 1 column */
+  .pricing-tabs { margin-bottom: 24px; }
+  .tab { padding: 14px 18px; font-size: 10px; }
+  .pricing-grid { grid-template-columns: 1fr; }
+  .tier { padding: 28px 22px; min-height: auto; }
+  .tier-name { font-size: 24px; }
+  .tier-price { font-size: 40px; }
+  .tier-features { padding-top: 16px; margin-bottom: 20px; }
+
+  /* Slice explainer — single column */
+  .slice-explainer {
+    grid-template-columns: 1fr;
+    gap: 20px;
+    padding: 24px;
+    margin-top: 28px;
+  }
+  .slice-explainer-left h3 { font-size: 24px; }
+  .slice-bar { height: 40px; }
+
+  /* Services — 1 column */
+  .svc-grid { grid-template-columns: 1fr; }
+  .svc-cell { padding: 28px 22px; min-height: auto; gap: 20px; }
+  .svc-title { font-size: 24px; }
+  .svc-price-val { font-size: 18px; }
+
+  /* Use cases — 1 column */
+  .usecase-grid { grid-template-columns: 1fr; gap: 16px; }
+  .usecase { padding: 22px 20px; }
+
+  /* Compliance — 1 column */
+  .compliance-grid { grid-template-columns: 1fr; }
+  .compliance-item { padding: 22px 20px; min-height: auto; }
+  .compliance-mark { font-size: 24px; }
+  .compliance-name { font-size: 18px; }
+
+  /* FAQ */
+  .faq-q h4 { font-size: 16px; }
+
+  /* CTA */
+  .cta-section { padding: 72px 20px; }
+  .cta-section h2 { font-size: 36px; }
+  .cta-actions { flex-direction: column; }
+  .cta-actions .btn { width: 100%; }
+
+  /* Footer — single column */
+  footer { padding: 48px 20px 24px; padding-bottom: max(24px, env(safe-area-inset-bottom)); }
+  .footer-top { grid-template-columns: 1fr; gap: 28px; padding-bottom: 32px; margin-bottom: 20px; }
+  .footer-bottom { flex-direction: column; gap: 8px; align-items: flex-start; }
+}
+
+/* Small phones — fine-tune typography */
+@media (max-width: 380px) {
+  .hero { padding: 110px 16px 48px; }
+  section { padding: 56px 16px; }
+  .hero h1 { font-size: 38px; }
+  .section-title { font-size: 28px; }
+  .why-item { flex-direction: column; gap: 14px; }
+  .why-item > div:first-child { width: auto; }
+}
+</style>
+</head>
+<body>
+
+<div class="statusbar">
+  <div class="statusbar-left">
+    <span><span class="dot"></span>OPERATIONAL</span>
+    <span class="hide-mobile">DUBAI &middot; UAE</span>
+  </div>
+  <div class="statusbar-right">
+    <span class="hide-mobile">99.9% UPTIME</span>
+    <span>EN &middot; AR</span>
+  </div>
+</div>
+
+<nav>
+  <div class="logo">
+    <span class="logo-mark"></span>Dune<em>box</em>
+  </div>
+  <div class="nav-links">
+    <a href="#infrastructure" class="hide-mobile">Infrastructure</a>
+    <a href="#pricing" class="hide-mobile">Pricing</a>
+    <a href="#services" class="hide-mobile">Services</a>
+    <a href="#compliance" class="hide-mobile">Compliance</a>
+    <a href="#contact" class="nav-cta">Get Started</a>
+  </div>
+</nav>
+
+<section class="hero">
+  <div class="hero-left">
+    <div class="hero-tagline reveal">SOVEREIGN GPU CLOUD &middot; MADE IN THE UAE</div>
+    <h1 class="reveal delay-1">
+      Frontier compute.<br>
+      Your data <em>never leaves</em><br>
+      the country.
+    </h1>
+    <p class="hero-sub reveal delay-2">
+      NVIDIA A10, Blackwell, and Blackwell Ultra GPUs hosted on UAE soil.
+      Fractional vGPU slices from $0.90/hr. Arabic LLM-ready. DIFC-compliant.
+    </p>
+    <div class="hero-actions reveal delay-3">
+      <a href="#pricing" class="btn">View Pricing <span class="arrow">&rarr;</span></a>
+      <a href="#contact" class="btn ghost">Talk to Sales</a>
+    </div>
+    <div class="hero-trust reveal delay-3">
+      <div class="trust-item">
+        <div class="label">Hosted in</div>
+        <div class="value">Dubai, UAE</div>
+      </div>
+      <div class="trust-item">
+        <div class="label">From</div>
+        <div class="value">$0.90/hr</div>
+      </div>
+      <div class="trust-item">
+        <div class="label">Arabic LLM</div>
+        <div class="value">Native</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="hero-right">
+    <div class="gpu-stack">
+      <div class="gpu-card tier-c">
+        <div class="gpu-header">
+          <span>SLICE</span>
+          <span class="gpu-status">LIVE</span>
+        </div>
+        <div class="gpu-title">A10 vGPU</div>
+        <div class="gpu-sub">FRACTIONAL &middot; SHARED</div>
+        <div class="gpu-row"><span>VRAM</span><span class="v">4-12 GB</span></div>
+        <div class="gpu-row"><span>USE</span><span class="v">DEV &middot; INFERENCE</span></div>
+        <div class="gpu-price">
+          <span class="l">FROM</span>
+          <span class="v">$0.90/hr</span>
+        </div>
+      </div>
+      <div class="gpu-card tier-b">
+        <div class="gpu-header">
+          <span>PROFESSIONAL</span>
+          <span class="gpu-status">LIVE</span>
+        </div>
+        <div class="gpu-title">RTX PRO 6000</div>
+        <div class="gpu-sub">BLACKWELL &middot; DEDICATED</div>
+        <div class="gpu-row"><span>VRAM</span><span class="v">96 GB GDDR7</span></div>
+        <div class="gpu-row"><span>USE</span><span class="v">FINE-TUNING</span></div>
+        <div class="gpu-price">
+          <span class="l">FROM</span>
+          <span class="v">$4.50/hr</span>
+        </div>
+      </div>
+      <div class="gpu-card tier-a">
+        <div class="gpu-header">
+          <span>FRONTIER</span>
+          <span class="gpu-status">LIVE</span>
+        </div>
+        <div class="gpu-title">NVIDIA B300</div>
+        <div class="gpu-sub">BLACKWELL ULTRA &middot; NVL8</div>
+        <div class="gpu-row"><span>VRAM</span><span class="v">288 GB HBM3e</span></div>
+        <div class="gpu-row"><span>FP4</span><span class="v">15 PFLOPS</span></div>
+        <div class="gpu-row"><span>vs H100</span><span class="v">6&ndash;8&times; FASTER</span></div>
+        <div class="gpu-price">
+          <span class="l">FROM</span>
+          <span class="v">$8.00/hr</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section>
+  <div class="section-label reveal">
+    <span class="num">01</span>
+    <span>Why Sovereign</span>
+  </div>
+  <h2 class="section-title reveal delay-1">
+    Built for workloads that <em>can't leave the UAE.</em>
+  </h2>
+  <p class="section-intro reveal delay-2">
+    Hyperscalers move your data across borders. Global GPU clouds add latency and
+    sovereignty risk. Dunebox keeps every byte, every model, and every inference
+    on UAE soil &mdash; under DIFC data protection law.
+  </p>
+
+  <div class="why-grid">
+    <div class="why-item reveal">
+      <div>
+        <div class="why-icon">i.</div>
+      </div>
+      <div>
+        <div class="why-title">Data Residency</div>
+        <div class="why-desc">100% UAE-hosted infrastructure. Your training data, model weights, and inference traffic never cross a border. Full audit trail.</div>
+      </div>
+    </div>
+    <div class="why-item reveal delay-1">
+      <div>
+        <div class="why-icon">ii.</div>
+      </div>
+      <div>
+        <div class="why-title">DIFC Compliance</div>
+        <div class="why-desc">Operating under DIFC Data Protection Law No. 5 of 2020 &mdash; GDPR-equivalent. Compliance documentation provided for regulated buyers.</div>
+      </div>
+    </div>
+    <div class="why-item reveal delay-2">
+      <div>
+        <div class="why-icon">iii.</div>
+      </div>
+      <div>
+        <div class="why-title">Arabic LLM Native</div>
+        <div class="why-desc">The only GCC GPU cloud with first-class Arabic LLM tooling &mdash; fine-tuning, evaluation, and deployment optimised for MSA and dialects.</div>
+      </div>
+    </div>
+    <div class="why-item reveal delay-3">
+      <div>
+        <div class="why-icon">iv.</div>
+      </div>
+      <div>
+        <div class="why-title">Fractional Access</div>
+        <div class="why-desc">vGPU slicing lets you start small. Pay for the GPU memory you need, not the whole card. Scale up to dedicated when you're ready.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="infrastructure" class="infra-section">
+  <div class="section-label reveal">
+    <span class="num">02</span>
+    <span>Infrastructure</span>
+  </div>
+  <h2 class="section-title reveal delay-1">
+    Three NVIDIA generations <em>&mdash; one Dubai DC.</em>
+  </h2>
+  <p class="section-intro reveal delay-2">
+    A10 Tensor Core for fractional and entry workloads. RTX PRO 6000 Blackwell
+    for production training. B300 Blackwell Ultra for frontier compute.
+    All operational in our Tier-III Dubai data centre.
+  </p>
+
+  <div class="infra-grid">
+    <div class="infra-card starter reveal">
+      <div class="infra-tag">Slice &middot; Live</div>
+      <div class="infra-title">NVIDIA A10</div>
+      <div class="infra-model">AMPERE &middot; vGPU CAPABLE</div>
+      <div class="infra-specs">
+        <div class="infra-spec"><div class="l">VRAM</div><div class="v">24 GB GDDR6</div></div>
+        <div class="infra-spec"><div class="l">vGPU Profiles</div><div class="v">4 / 12 / 24 GB</div></div>
+        <div class="infra-spec"><div class="l">Tensor Perf</div><div class="v">125 TFLOPS</div></div>
+        <div class="infra-spec"><div class="l">TDP</div><div class="v">150W</div></div>
+      </div>
+      <div class="infra-best-for">
+        <strong>Best For</strong>
+        Inference up to 13B parameters &middot; RAG and embedding pipelines &middot; Small fine-tuning &middot; Dev environments &middot; Cost-efficient sovereign starting point.
+      </div>
+    </div>
+
+    <div class="infra-card reveal delay-1">
+      <div class="infra-tag">Production &middot; Live</div>
+      <div class="infra-title">RTX PRO 6000</div>
+      <div class="infra-model">BLACKWELL &middot; 8-GPU NODE</div>
+      <div class="infra-specs">
+        <div class="infra-spec"><div class="l">VRAM / GPU</div><div class="v">96 GB GDDR7</div></div>
+        <div class="infra-spec"><div class="l">Total VRAM</div><div class="v">768 GB</div></div>
+        <div class="infra-spec"><div class="l">CPUs</div><div class="v">2 &times; AMD Genoa</div></div>
+        <div class="infra-spec"><div class="l">Storage</div><div class="v">30 TB NVMe</div></div>
+      </div>
+      <div class="infra-best-for">
+        <strong>Best For</strong>
+        Fine-tuning 7B&ndash;70B models &middot; Production inference at scale &middot; Multi-modal training &middot; Arabic LLM workloads &middot; Dedicated GPU customers.
+      </div>
+    </div>
+
+    <div class="infra-card frontier reveal delay-2">
+      <div class="infra-tag">Frontier &middot; Live</div>
+      <div class="infra-title">NVIDIA B300 SXM</div>
+      <div class="infra-model">BLACKWELL ULTRA &middot; NVL8</div>
+      <div class="infra-specs">
+        <div class="infra-spec"><div class="l">VRAM / GPU</div><div class="v">288 GB HBM3e</div></div>
+        <div class="infra-spec"><div class="l">Total VRAM</div><div class="v">2.304 TB</div></div>
+        <div class="infra-spec"><div class="l">FP4</div><div class="v">120 PFLOPS</div></div>
+        <div class="infra-spec"><div class="l">NVLink</div><div class="v">5 &middot; 1.8 TB/s</div></div>
+      </div>
+      <div class="infra-best-for">
+        <strong>Best For</strong>
+        Reasoning models (DeepSeek-R1, o-series) &middot; 671B-parameter inference &middot; Agentic AI orchestration &middot; Frontier research &middot; Sovereign government AI.
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="pricing">
+  <div class="section-label reveal">
+    <span class="num">03</span>
+    <span>GPU Pricing</span>
+  </div>
+  <h2 class="section-title reveal delay-1">
+    Four tiers. <em>Slice it small or rent the rack.</em>
+  </h2>
+  <p class="section-intro reveal delay-2">
+    Pay-as-you-go on-demand or commit to a reserved cluster for up to 30% off.
+    No data egress fees. No hidden charges. VAT applied per UAE FTA rules.
+  </p>
+
+  <div class="pricing-tabs reveal">
+    <button class="tab active" data-mode="on-demand">On-Demand</button>
+    <button class="tab" data-mode="reserved">Reserved &middot; 1 yr</button>
+  </div>
+
+  <div class="pricing-grid">
+    <div class="tier reveal">
+      <div class="tier-name">Slice</div>
+      <div class="tier-tag">A10 Fractional</div>
+      <div class="tier-price" data-on="0.90" data-res="0.65"><span class="small">$</span>0.90<span class="small">/hr</span></div>
+      <div class="tier-price-unit">4 GB vGPU Slice</div>
+      <ul class="tier-features">
+        <li>NVIDIA A10 &middot; 4 GB vGPU profile</li>
+        <li>Hardware-isolated memory</li>
+        <li>Pre-built ML containers</li>
+        <li>Jupyter, SSH, REST API</li>
+        <li>UAE data residency</li>
+        <li>Community support</li>
+      </ul>
+      <a href="#contact" class="tier-cta">Start Building &rarr;</a>
+    </div>
+
+    <div class="tier reveal delay-1">
+      <div class="tier-name">Starter</div>
+      <div class="tier-tag">A10 Half-Card</div>
+      <div class="tier-price" data-on="1.60" data-res="1.15"><span class="small">$</span>1.60<span class="small">/hr</span></div>
+      <div class="tier-price-unit">12 GB vGPU Slice</div>
+      <ul class="tier-features">
+        <li>NVIDIA A10 &middot; 12 GB vGPU profile</li>
+        <li>Half-card dedicated allocation</li>
+        <li>RAG &amp; small fine-tuning</li>
+        <li>Persistent NVMe storage</li>
+        <li>Email support</li>
+        <li>UAE data residency</li>
+      </ul>
+      <a href="#contact" class="tier-cta">Get Started &rarr;</a>
+    </div>
+
+    <div class="tier featured reveal delay-2">
+      <div class="tier-badge">Most Popular</div>
+      <div class="tier-name">Professional</div>
+      <div class="tier-tag">RTX PRO 6000</div>
+      <div class="tier-price" data-on="4.50" data-res="3.15"><span class="small">$</span>4.50<span class="small">/hr</span></div>
+      <div class="tier-price-unit">Per GPU &middot; Per Hour</div>
+      <ul class="tier-features">
+        <li>RTX PRO 6000 Blackwell &middot; 96 GB</li>
+        <li>Dedicated 1&times; or 2&times; GPU instances</li>
+        <li>Persistent NVMe storage included</li>
+        <li>100 GbE networking</li>
+        <li>Arabic LLM toolkit pre-installed</li>
+        <li>Priority chat support</li>
+        <li>99.9% uptime SLA</li>
+      </ul>
+      <a href="#contact" class="tier-cta">Get Started &rarr;</a>
+    </div>
+
+    <div class="tier reveal delay-3">
+      <div class="tier-name">Frontier</div>
+      <div class="tier-tag">B300 Cluster</div>
+      <div class="tier-price" data-on="8.00" data-res="5.60"><span class="small">$</span>8.00<span class="small">/hr</span></div>
+      <div class="tier-price-unit">Per GPU &middot; From</div>
+      <ul class="tier-features">
+        <li>B300 &middot; 288 GB HBM3e per GPU</li>
+        <li>1&times; to 8&times; B300 dedicated</li>
+        <li>NVLink 5 &middot; 1.8 TB/s</li>
+        <li>InfiniBand NDR 400G</li>
+        <li>Custom SLA &middot; 24/7 support</li>
+        <li>White-glove onboarding</li>
+        <li>Liquid-cooled</li>
+      </ul>
+      <a href="#contact" class="tier-cta">Request Quote &rarr;</a>
+    </div>
+  </div>
+
+  <div class="slice-explainer">
+    <div class="slice-explainer-left">
+      <div class="tag">vGPU Orchestration</div>
+      <h3>Don't pay for <em>VRAM you don't use.</em></h3>
+    </div>
+    <div class="slice-explainer-right">
+      <p>
+        Most inference and dev workloads use a fraction of a GPU's memory.
+        Our A10 fleet runs NVIDIA vGPU partitioning &mdash; carving each card into
+        hardware-isolated slices so you pay only for what you need.
+      </p>
+      <p>
+        Two slice profiles available: 4 GB for inference and dev, or 12 GB for RAG and small fine-tuning. 24 GB dedicated A10 instances also available on request.
+      </p>
+      <div class="slice-bar">
+        <div class="slice-segment quarter">4 GB</div>
+        <div class="slice-segment quarter">4 GB</div>
+        <div class="slice-segment half">12 GB</div>
+      </div>
+    </div>
+  </div>
+
+  <p class="pricing-note">
+    All prices in USD per GPU/slice per hour. Reserved discounts shown for 12-month commitments. 5% UAE VAT applies. No data egress fees.
+  </p>
+</section>
+
+<section id="services" class="services-section">
+  <div class="section-label reveal">
+    <span class="num">04</span>
+    <span>Managed Services</span>
+  </div>
+  <h2 class="section-title reveal delay-1">
+    Infrastructure <em>and</em> the team to use it.
+  </h2>
+  <p class="section-intro reveal delay-2">
+    Beyond raw compute, Dunebox offers hands-on services for teams that need
+    expertise alongside hardware &mdash; Arabic LLM specialists, MLOps engineers, and
+    AI strategy consultants.
+  </p>
+
+  <div class="svc-grid">
+    <div class="svc-cell reveal">
+      <div>
+        <div class="svc-num">i.</div>
+        <div class="svc-title">Arabic LLM<br>Fine-Tuning</div>
+        <div class="svc-desc">
+          Custom fine-tuning of open-weight models (Llama, Qwen, DeepSeek, Falcon)
+          for Modern Standard Arabic and regional dialects. Includes dataset
+          curation, training, eval, and deployment-ready artefacts.
+        </div>
+      </div>
+      <div class="svc-price">
+        <span class="svc-price-label">Project Fee</span>
+        <span class="svc-price-val">From $30,000</span>
+      </div>
+    </div>
+
+    <div class="svc-cell reveal delay-1">
+      <div>
+        <div class="svc-num">ii.</div>
+        <div class="svc-title">Managed<br>Inference API</div>
+        <div class="svc-desc">
+          Production-grade inference endpoints with autoscaling, monitoring, and
+          UAE-resident logging. Pay per million tokens. OpenAI-compatible API.
+          Bring your own model or use ours.
+        </div>
+      </div>
+      <div class="svc-price">
+        <span class="svc-price-label">Per M Tokens</span>
+        <span class="svc-price-val">From $0.40</span>
+      </div>
+    </div>
+
+    <div class="svc-cell reveal">
+      <div>
+        <div class="svc-num">iii.</div>
+        <div class="svc-title">AI Strategy<br>Consulting</div>
+        <div class="svc-desc">
+          Workshop-led engagements for boards, CTOs, and CDOs scoping AI initiatives.
+          Roadmap design, build-vs-buy analysis, vendor selection, and
+          DIFC-compliant deployment planning.
+        </div>
+      </div>
+      <div class="svc-price">
+        <span class="svc-price-label">Day Rate</span>
+        <span class="svc-price-val">$3,500/day</span>
+      </div>
+    </div>
+
+    <div class="svc-cell reveal delay-1">
+      <div>
+        <div class="svc-num">iv.</div>
+        <div class="svc-title">Enterprise<br>Reserved Cluster</div>
+        <div class="svc-desc">
+          Dedicated 8-GPU node &mdash; RTX PRO 6000 or B300 &mdash; for your team. Includes
+          dedicated networking, custom SLA, named account engineer, and quarterly
+          performance reviews.
+        </div>
+      </div>
+      <div class="svc-price">
+        <span class="svc-price-label">Custom SLA</span>
+        <span class="svc-price-val">Contact Sales</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section>
+  <div class="section-label reveal">
+    <span class="num">05</span>
+    <span>Use Cases</span>
+  </div>
+  <h2 class="section-title reveal delay-1">
+    What teams <em>actually build</em> on Dunebox.
+  </h2>
+  <p class="section-intro reveal delay-2">
+    From fintech RAG systems to government Arabic chatbots to healthcare
+    diagnostics &mdash; sovereign compute is the unlock.
+  </p>
+
+  <div class="usecase-grid">
+    <div class="usecase reveal">
+      <div class="usecase-tag">Financial Services</div>
+      <div class="usecase-title">Regulated Document Intelligence</div>
+      <div class="usecase-desc">DIFC-resident RAG and document Q&amp;A over private financial filings, contracts, and regulatory submissions. No data leaves UAE.</div>
+      <div class="usecase-meta">
+        <span>Tier: Starter</span>
+        <span>Models: 7B&ndash;13B</span>
+      </div>
+    </div>
+    <div class="usecase reveal delay-1">
+      <div class="usecase-tag">Government</div>
+      <div class="usecase-title">Sovereign Arabic Chatbot</div>
+      <div class="usecase-desc">Public-service chatbots trained on government corpora and Modern Standard Arabic. Hosted under DIFC data law for citizen privacy.</div>
+      <div class="usecase-meta">
+        <span>Tier: Frontier</span>
+        <span>Models: 70B+</span>
+      </div>
+    </div>
+    <div class="usecase reveal delay-2">
+      <div class="usecase-tag">Healthcare</div>
+      <div class="usecase-title">Clinical AI Reasoning</div>
+      <div class="usecase-desc">Diagnostic-assist and triage models running on B300 with patient data residency. UAE-licensed clinical use cases.</div>
+      <div class="usecase-meta">
+        <span>Tier: Frontier</span>
+        <span>HIPAA-aligned</span>
+      </div>
+    </div>
+    <div class="usecase reveal">
+      <div class="usecase-tag">Legal</div>
+      <div class="usecase-title">Arabic Contract Analysis</div>
+      <div class="usecase-desc">Fine-tuned models for legal Arabic &mdash; clause extraction, risk scoring, and comparative analysis across UAE and GCC jurisdictions.</div>
+      <div class="usecase-meta">
+        <span>Tier: Pro</span>
+        <span>Service: Fine-Tuning</span>
+      </div>
+    </div>
+    <div class="usecase reveal delay-1">
+      <div class="usecase-tag">Startups</div>
+      <div class="usecase-title">Lean AI Prototyping</div>
+      <div class="usecase-desc">Stand up an inference service on a 4 GB A10 slice for under $1/hr. Iterate fast on sovereign infrastructure without committing to a full GPU.</div>
+      <div class="usecase-meta">
+        <span>Tier: Slice</span>
+        <span>From $0.90/hr</span>
+      </div>
+    </div>
+    <div class="usecase reveal delay-2">
+      <div class="usecase-tag">Research</div>
+      <div class="usecase-title">Academic LLM Training</div>
+      <div class="usecase-desc">University and research-lab access to frontier compute for sovereign research initiatives. Discounted academic tier available.</div>
+      <div class="usecase-meta">
+        <span>Tier: All</span>
+        <span>Academic discount</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="compliance" class="trust-section">
+  <div class="section-label reveal">
+    <span class="num">06</span>
+    <span>Compliance &amp; Trust</span>
+  </div>
+  <h2 class="section-title reveal delay-1">
+    Built for <em>regulated industries.</em>
+  </h2>
+  <p class="section-intro reveal delay-2">
+    Dunebox AI FZE is registered at the Dubai AI Campus, DIFC. Our compliance
+    posture is documented and auditable for buyers in financial services,
+    healthcare, government, and legal sectors.
+  </p>
+
+  <div class="compliance-grid">
+    <div class="compliance-item reveal">
+      <div class="compliance-mark">&sect;</div>
+      <div>
+        <div class="compliance-name">DIFC Registered</div>
+        <div class="compliance-desc">Free Zone Entity at Dubai AI Campus. 100% UAE jurisdiction with DIFC Court oversight.</div>
+      </div>
+    </div>
+    <div class="compliance-item reveal delay-1">
+      <div class="compliance-mark">&para;</div>
+      <div>
+        <div class="compliance-name">DIFC Data Protection Law</div>
+        <div class="compliance-desc">DIFC Law No. 5 of 2020 &mdash; GDPR-equivalent privacy framework. Documentation available on request.</div>
+      </div>
+    </div>
+    <div class="compliance-item reveal delay-2">
+      <div class="compliance-mark">&dagger;</div>
+      <div>
+        <div class="compliance-name">UAE PDPL Aligned</div>
+        <div class="compliance-desc">UAE Federal Personal Data Protection Law compliance. Data subject rights honoured end-to-end.</div>
+      </div>
+    </div>
+    <div class="compliance-item reveal">
+      <div class="compliance-mark">&Dagger;</div>
+      <div>
+        <div class="compliance-name">UAE AI Authority</div>
+        <div class="compliance-desc">Registered with the UAE AI Authority. Operating within the UAE AI Strategy 2031 framework.</div>
+      </div>
+    </div>
+    <div class="compliance-item reveal delay-1">
+      <div class="compliance-mark">&loz;</div>
+      <div>
+        <div class="compliance-name">Tier-III Data Centre</div>
+        <div class="compliance-desc">All hardware racked in a single Tier-III Dubai facility with redundant power, cooling, and connectivity.</div>
+      </div>
+    </div>
+    <div class="compliance-item reveal delay-2">
+      <div class="compliance-mark">&#8251;</div>
+      <div>
+        <div class="compliance-name">UAE VAT Registered</div>
+        <div class="compliance-desc">FTA-registered for VAT. Tax-compliant invoicing for all UAE business customers.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section>
+  <div class="section-label reveal">
+    <span class="num">07</span>
+    <span>Common Questions</span>
+  </div>
+  <h2 class="section-title reveal delay-1">
+    Answers, <em>before you ask.</em>
+  </h2>
+
+  <div class="faq-list">
+    <div class="faq-item reveal">
+      <div class="faq-q">
+        <h4>Where exactly is my data hosted?</h4>
+        <span class="faq-toggle">+</span>
+      </div>
+      <div class="faq-a">All compute, storage, and inference traffic resides in our Dubai Tier-III data centre. No data is replicated, mirrored, or processed outside UAE borders. We provide written data residency attestation on request.</div>
+    </div>
+    <div class="faq-item reveal">
+      <div class="faq-q">
+        <h4>What is a vGPU slice and how is it isolated?</h4>
+        <span class="faq-toggle">+</span>
+      </div>
+      <div class="faq-a">A vGPU slice is a hardware-partitioned share of a physical A10 GPU using NVIDIA vGPU technology. Memory is dedicated and isolated per slice &mdash; no other tenant can read your VRAM. Compute is time-sliced fairly. You get root SSH on a dedicated VM that maps to your slice.</div>
+    </div>
+    <div class="faq-item reveal">
+      <div class="faq-q">
+        <h4>How do I access GPUs &mdash; is there a portal?</h4>
+        <span class="faq-toggle">+</span>
+      </div>
+      <div class="faq-a">Yes. Sign up via our customer portal at dunebox.ai, choose a tier, and you'll have SSH and Jupyter access within minutes. We also provide an OpenAI-compatible REST API for inference workloads.</div>
+    </div>
+    <div class="faq-item reveal">
+      <div class="faq-q">
+        <h4>Do you support custom models or only your own?</h4>
+        <span class="faq-toggle">+</span>
+      </div>
+      <div class="faq-a">Bring any open-weight model (Llama, Qwen, Mistral, DeepSeek, Falcon, and more) or your own proprietary weights. We also offer pre-tuned Arabic LLMs as a managed service.</div>
+    </div>
+    <div class="faq-item reveal">
+      <div class="faq-q">
+        <h4>Can I move from a slice to a dedicated GPU later?</h4>
+        <span class="faq-toggle">+</span>
+      </div>
+      <div class="faq-a">Yes. Many customers start on an A10 slice for prototyping, scale to a dedicated A10, then move to RTX PRO 6000 or B300 for production workloads. Storage and configurations migrate cleanly between tiers.</div>
+    </div>
+    <div class="faq-item reveal">
+      <div class="faq-q">
+        <h4>Are there data egress fees?</h4>
+        <span class="faq-toggle">+</span>
+      </div>
+      <div class="faq-a">No. Unlike hyperscalers, Dunebox does not charge egress fees. You pay only for GPU compute and persistent storage. Network is included.</div>
+    </div>
+    <div class="faq-item reveal">
+      <div class="faq-q">
+        <h4>Can I get compliance documentation for my procurement team?</h4>
+        <span class="faq-toggle">+</span>
+      </div>
+      <div class="faq-a">Yes. We provide DIFC compliance attestations, data processing agreements (DPAs), security questionnaires, and architecture diagrams to qualified buyers under NDA.</div>
+    </div>
+  </div>
+</section>
+
+<section class="cta-section" id="contact">
+  <h2>Sovereign compute, <em>ready when you are.</em></h2>
+  <p>Talk to our team about pricing, custom SLAs, or a proof-of-concept on A10, Blackwell, or Blackwell Ultra.</p>
+  <div class="cta-actions">
+    <a href="mailto:hello@dunebox.ai" class="btn">hello@dunebox.ai <span class="arrow">&rarr;</span></a>
+    <a href="https://dunebox.ai" class="btn ghost">Visit dunebox.ai</a>
+  </div>
+</section>
+
+<footer>
+  <div class="footer-top">
+    <div class="footer-brand">
+      <div class="logo"><span class="logo-mark"></span>Dune<em>box</em></div>
+      <p>"Frontier compute. Your data never leaves the country."</p>
+    </div>
+    <div class="footer-col">
+      <h4>Product</h4>
+      <a href="#infrastructure">Infrastructure</a>
+      <a href="#pricing">Pricing</a>
+      <a href="#services">Services</a>
+      <a href="#compliance">Compliance</a>
+    </div>
+    <div class="footer-col">
+      <h4>Company</h4>
+      <p>Dunebox AI FZE</p>
+      <p>Dubai AI Campus</p>
+      <p>DIFC, Dubai, UAE</p>
+    </div>
+    <div class="footer-col">
+      <h4>Contact</h4>
+      <a href="mailto:hello@dunebox.ai">hello@dunebox.ai</a>
+      <a href="https://dunebox.ai">dunebox.ai</a>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    <span>&copy; 2026 Dunebox AI FZE</span>
+    <span>UAE &middot; DIFC Registered</span>
+  </div>
+</footer>
+
+<script>
+const observer = new IntersectionObserver((entries) => {
+  entries.forEach(entry => {
+    if (entry.isIntersecting) entry.target.classList.add('visible');
+  });
+}, { threshold: 0.12, rootMargin: '0px 0px -40px 0px' });
+document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+
+document.querySelectorAll('.faq-item').forEach(item => {
+  item.addEventListener('click', () => {
+    item.classList.toggle('open');
+  });
+});
+
+const tabs = document.querySelectorAll('.tab');
+const prices = document.querySelectorAll('.tier-price');
+tabs.forEach(tab => {
+  tab.addEventListener('click', () => {
+    tabs.forEach(t => t.classList.remove('active'));
+    tab.classList.add('active');
+    const mode = tab.dataset.mode;
+    prices.forEach(p => {
+      let val = mode === 'on-demand' ? p.dataset.on : p.dataset.res;
+      p.innerHTML = '<span class="small">$</span>' + val + '<span class="small">/hr</span>';
+    });
+  });
+});
+
+// Hero parallax — desktop only, never runs on mobile
+if (window.matchMedia('(min-width: 969px)').matches) {
+  const heroRight = document.querySelector('.hero-right');
+  const cards = document.querySelectorAll('.gpu-card');
+  if (heroRight && cards.length) {
+    heroRight.addEventListener('mousemove', (e) => {
+      const rect = heroRight.getBoundingClientRect();
+      const x = (e.clientX - rect.left - rect.width / 2) / rect.width;
+      const y = (e.clientY - rect.top - rect.height / 2) / rect.height;
+      cards.forEach((card, i) => {
+        const depth = (i + 1) * 5;
+        card.style.transition = 'transform 0.4s cubic-bezier(0.16, 1, 0.3, 1)';
+        let baseTransform = '';
+        if (card.classList.contains('tier-a')) baseTransform = 'translate(calc(-50% + ' + (x*depth) + 'px), calc(-50% + ' + (y*depth) + 'px)) rotate(-2deg)';
+        else if (card.classList.contains('tier-b')) baseTransform = 'translate(calc(-30% + ' + (x*depth) + 'px), calc(-10% + ' + (y*depth) + 'px)) rotate(3deg)';
+        else baseTransform = 'translate(calc(-70% + ' + (x*depth) + 'px), calc(-90% + ' + (y*depth) + 'px)) rotate(-5deg)';
+        card.style.transform = baseTransform;
+      });
+    });
+  }
+}
+</script>
+</body>
+</html>
