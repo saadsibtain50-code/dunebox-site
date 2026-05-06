@@ -732,6 +732,103 @@ section {
 .cta-section .btn.ghost:hover { background: var(--bone); color: var(--rust); }
 
 /* =============================================================
+   SIGNUP FORM (lives inside .cta-section)
+   ============================================================= */
+.signup-form {
+  max-width: 720px;
+  margin: 0 auto;
+  text-align: left;
+}
+.form-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+  margin-bottom: 16px;
+}
+.form-field { display: flex; flex-direction: column; margin-bottom: 16px; }
+.form-row .form-field { margin-bottom: 0; }
+.form-field label {
+  font-family: var(--mono); font-size: 10px;
+  letter-spacing: 0.1em; text-transform: uppercase;
+  color: var(--bone); opacity: 0.7;
+  margin-bottom: 8px;
+}
+.form-field input,
+.form-field select,
+.form-field textarea {
+  font-family: var(--sans); font-size: 15px;
+  background: rgba(244, 237, 228, 0.08);
+  color: var(--bone);
+  border: 1px solid rgba(244, 237, 228, 0.3);
+  padding: 12px 14px;
+  outline: none;
+  transition: border-color 0.2s, background 0.2s;
+  width: 100%;
+  -webkit-appearance: none; appearance: none;
+  border-radius: 0;
+}
+.form-field input::placeholder,
+.form-field textarea::placeholder { color: var(--bone); opacity: 0.4; }
+.form-field input:focus,
+.form-field select:focus,
+.form-field textarea:focus {
+  border-color: var(--bone);
+  background: rgba(244, 237, 228, 0.14);
+}
+.form-field select {
+  background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 12 12'><path d='M2 4 L6 8 L10 4' stroke='%23f4ede4' stroke-width='1.2' fill='none'/></svg>");
+  background-repeat: no-repeat;
+  background-position: right 14px center;
+  padding-right: 36px;
+  cursor: pointer;
+}
+.form-field select option { background: var(--ink); color: var(--bone); }
+.form-field textarea { resize: vertical; min-height: 80px; }
+.form-actions {
+  display: flex; align-items: center;
+  gap: 24px; margin-top: 24px;
+  flex-wrap: wrap;
+}
+.form-alt {
+  font-family: var(--mono); font-size: 11px;
+  letter-spacing: 0.08em; text-transform: uppercase;
+  color: var(--bone); opacity: 0.7;
+  text-decoration: none;
+  border-bottom: 1px solid transparent;
+  transition: opacity 0.2s, border-color 0.2s;
+}
+.form-alt:hover { opacity: 1; border-bottom-color: var(--bone); }
+.form-status {
+  margin-top: 20px;
+  font-family: var(--mono); font-size: 12px;
+  letter-spacing: 0.05em;
+  min-height: 1.5em;
+}
+.form-status.success { color: var(--sand); }
+.form-status.error { color: #ffd3a8; }
+.signup-form.submitted .form-row,
+.signup-form.submitted > .form-field,
+.signup-form.submitted .form-actions { display: none; }
+.signup-form.submitted .form-status {
+  font-size: 22px;
+  font-family: var(--serif);
+  font-weight: 400;
+  letter-spacing: -0.01em;
+  text-transform: none;
+  text-align: center;
+  padding: 40px 0;
+  color: var(--bone);
+  opacity: 1;
+}
+@media (max-width: 720px) {
+  .form-row { grid-template-columns: 1fr; gap: 0; }
+  .form-row .form-field { margin-bottom: 16px; }
+  .form-actions { flex-direction: column; align-items: stretch; gap: 16px; }
+  .form-actions .btn { width: 100%; }
+  .form-alt { text-align: center; }
+}
+
+/* =============================================================
    FOOTER
    ============================================================= */
 footer {
@@ -1579,11 +1676,72 @@ footer {
 
 <section class="cta-section" id="contact">
   <h2>Sovereign compute, <em>ready when you are.</em></h2>
-  <p>Talk to our team about pricing, custom SLAs, or a proof-of-concept on A10, Blackwell, or Blackwell Ultra.</p>
-  <div class="cta-actions">
-    <a href="mailto:hello@dunebox.ai" class="btn">hello@dunebox.ai <span class="arrow">&rarr;</span></a>
-    <a href="https://dunebox.ai" class="btn ghost">Visit dunebox.ai</a>
-  </div>
+  <p>Reserve capacity, request a proof-of-concept, or talk pricing. Our team responds within one business day.</p>
+
+  <form id="signup-form" class="signup-form" action="https://api.web3forms.com/submit" method="POST" novalidate>
+    <input type="hidden" name="access_key" value="346f5d84-2456-43e3-ae58-c22105e0b4e3">
+    <input type="hidden" name="subject" value="New Dunebox AI signup">
+    <input type="hidden" name="from_name" value="Dunebox AI Website">
+    <input type="checkbox" name="botcheck" style="display:none" tabindex="-1" autocomplete="off">
+
+    <div class="form-row">
+      <div class="form-field">
+        <label for="f-name">Full name</label>
+        <input type="text" id="f-name" name="name" required autocomplete="name">
+      </div>
+      <div class="form-field">
+        <label for="f-email">Work email</label>
+        <input type="email" id="f-email" name="email" required autocomplete="email">
+      </div>
+    </div>
+
+    <div class="form-row">
+      <div class="form-field">
+        <label for="f-company">Company</label>
+        <input type="text" id="f-company" name="company" required autocomplete="organization">
+      </div>
+      <div class="form-field">
+        <label for="f-tier">GPU tier of interest</label>
+        <select id="f-tier" name="tier" required>
+          <option value="">Select one</option>
+          <option value="A10 vGPU (Slice / Inference)">A10 vGPU &middot; Slice / Inference</option>
+          <option value="RTX PRO 6000 (Blackwell / Fine-tuning)">RTX PRO 6000 &middot; Blackwell / Fine-tuning</option>
+          <option value="NVIDIA B300 (Blackwell Ultra / Frontier)">NVIDIA B300 &middot; Blackwell Ultra / Frontier</option>
+          <option value="Not sure / Need guidance">Not sure &mdash; need guidance</option>
+        </select>
+      </div>
+    </div>
+
+    <div class="form-row">
+      <div class="form-field">
+        <label for="f-usage">Estimated monthly usage</label>
+        <select id="f-usage" name="usage">
+          <option value="">Select one</option>
+          <option value="< 100 GPU-hours">Less than 100 GPU-hours</option>
+          <option value="100-500 GPU-hours">100&ndash;500 GPU-hours</option>
+          <option value="500-2000 GPU-hours">500&ndash;2,000 GPU-hours</option>
+          <option value="2000+ GPU-hours / reserved">2,000+ GPU-hours / reserved capacity</option>
+          <option value="Just exploring">Just exploring</option>
+        </select>
+      </div>
+      <div class="form-field">
+        <label for="f-usecase">Workload (optional)</label>
+        <input type="text" id="f-usecase" name="usecase" placeholder="e.g. Arabic LLM fine-tune, RAG, batch inference">
+      </div>
+    </div>
+
+    <div class="form-field">
+      <label for="f-message">Message (optional)</label>
+      <textarea id="f-message" name="message" rows="3" placeholder="Anything specific you'd like us to know?"></textarea>
+    </div>
+
+    <div class="form-actions">
+      <button type="submit" class="btn">Request access <span class="arrow">&rarr;</span></button>
+      <a href="mailto:hello@dunebox.ai" class="form-alt">or email hello@dunebox.ai directly</a>
+    </div>
+
+    <div class="form-status" id="form-status" role="status" aria-live="polite"></div>
+  </form>
 </section>
 
 <footer>
@@ -1644,6 +1802,39 @@ tabs.forEach(tab => {
     });
   });
 });
+
+// Signup form — async submit to Web3Forms
+const signupForm = document.getElementById('signup-form');
+const formStatus = document.getElementById('form-status');
+if (signupForm && formStatus) {
+  signupForm.addEventListener('submit', async (e) => {
+    e.preventDefault();
+    formStatus.classList.remove('success', 'error');
+    formStatus.textContent = 'Sending…';
+    const submitBtn = signupForm.querySelector('button[type="submit"]');
+    if (submitBtn) submitBtn.disabled = true;
+
+    try {
+      const res = await fetch('https://api.web3forms.com/submit', {
+        method: 'POST',
+        body: new FormData(signupForm),
+        headers: { 'Accept': 'application/json' }
+      });
+      const data = await res.json();
+      if (res.ok && data.success) {
+        signupForm.classList.add('submitted');
+        formStatus.classList.add('success');
+        formStatus.textContent = 'Thanks — we’ll be in touch within one business day.';
+      } else {
+        throw new Error(data.message || 'Submission failed');
+      }
+    } catch (err) {
+      formStatus.classList.add('error');
+      formStatus.textContent = 'Something went wrong. Email hello@dunebox.ai instead.';
+      if (submitBtn) submitBtn.disabled = false;
+    }
+  });
+}
 
 // Hero parallax — desktop only, never runs on mobile
 if (window.matchMedia('(min-width: 969px)').matches) {
